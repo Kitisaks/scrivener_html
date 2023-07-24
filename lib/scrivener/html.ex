@@ -1,5 +1,6 @@
 defmodule Scrivener.HTML do
-  use Phoenix.HTML
+  alias Phoenix.HTML
+
   @defaults [view_style: :bootstrap, action: :index, page_param: :page, hide_single: false]
   @view_styles [:bootstrap, :semantic, :foundation, :bootstrap_v4, :materialize, :bulma]
   @raw_defaults [
@@ -8,7 +9,7 @@ defmodule Scrivener.HTML do
     previous: "<<",
     first: true,
     last: true,
-    ellipsis: raw("&hellip;")
+    ellipsis: HTML.raw("&hellip;")
   ]
   @moduledoc """
   For use with Phoenix.HTML, configure the `:routes_helper` module like the following:
@@ -199,8 +200,8 @@ defmodule Scrivener.HTML do
        ) do
     url_params = Keyword.drop(params, Keyword.keys(@raw_defaults))
 
-    content_tag :nav do
-      content_tag :ul, class: "pagination" do
+    HTML.Tag.content_tag :nav do
+      HTML.Tag.content_tag :ul, class: "pagination" do
         raw_pagination_links(paginator, params)
         |> Enum.map(&page(&1, url_params, args, page_param, path, paginator, :bootstrap))
       end
@@ -217,8 +218,8 @@ defmodule Scrivener.HTML do
        ) do
     url_params = Keyword.drop(params, Keyword.keys(@raw_defaults))
 
-    content_tag :nav, "aria-label": "Page navigation" do
-      content_tag :ul, class: "pagination" do
+    HTML.Tag.content_tag :nav, "aria-label": "Page navigation" do
+      HTML.Tag.content_tag :ul, class: "pagination" do
         raw_pagination_links(paginator, params)
         |> Enum.map(&page(&1, url_params, args, page_param, path, paginator, :bootstrap_v4))
       end
@@ -235,7 +236,7 @@ defmodule Scrivener.HTML do
        ) do
     url_params = Keyword.drop(params, Keyword.keys(@raw_defaults))
 
-    content_tag :div, class: "ui pagination menu" do
+    HTML.Tag.content_tag :div, class: "ui pagination menu" do
       raw_pagination_links(paginator, params)
       |> Enum.map(&page(&1, url_params, args, page_param, path, paginator, :semantic))
     end
@@ -251,7 +252,7 @@ defmodule Scrivener.HTML do
        ) do
     url_params = Keyword.drop(params, Keyword.keys(@raw_defaults))
 
-    content_tag :ul, class: "pagination", role: "pagination" do
+    HTML.Tag.content_tag :ul, class: "pagination", role: "pagination" do
       raw_pagination_links(paginator, params)
       |> Enum.map(&page(&1, url_params, args, page_param, path, paginator, :foundation))
     end
@@ -267,7 +268,7 @@ defmodule Scrivener.HTML do
        ) do
     url_params = Keyword.drop(params, Keyword.keys(@raw_defaults))
 
-    content_tag :ul, class: "pagination" do
+    HTML.Tag.content_tag :ul, class: "pagination" do
       raw_pagination_links(paginator, params)
       |> Enum.map(&page(&1, url_params, args, page_param, path, paginator, :materialize))
     end
@@ -283,8 +284,8 @@ defmodule Scrivener.HTML do
        ) do
     url_params = Keyword.drop(params, Keyword.keys(@raw_defaults))
 
-    content_tag :nav, class: "pagination is-centered" do
-      content_tag :ul, class: "pagination-list" do
+    HTML.Tag.content_tag :nav, class: "pagination is-centered" do
+      HTML.Tag.content_tag :ul, class: "pagination-list" do
         raw_pagination_links(paginator, params)
         |> Enum.map(&page(&1, url_params, args, page_param, path, paginator, :bulma))
       end
@@ -308,16 +309,17 @@ defmodule Scrivener.HTML do
   end
 
   defp page({:ellipsis, text}, _url_params, _args, _page_param, _path, paginator, :semantic) do
-    content_tag(:div, safe(text),
+    HTML.Tag.content_tag(:div, safe(text),
       class: link_classes_for_style(paginator, :ellipsis, :semantic) |> Enum.join(" ")
     )
   end
 
   defp page({:ellipsis, text}, _url_params, _args, _page_param, _path, paginator, style) do
-    content_tag(:li, class: li_classes_for_style(paginator, :ellipsis, style) |> Enum.join(" ")) do
+    HTML.Tag.content_tag :li,
+      class: li_classes_for_style(paginator, :ellipsis, style) |> Enum.join(" ") do
       style
       |> ellipsis_tag
-      |> content_tag(safe(text),
+      |> HTML.Tag.content_tag(safe(text),
         class: link_classes_for_style(paginator, :ellipsis, style) |> Enum.join(" ")
       )
     end
@@ -335,18 +337,18 @@ defmodule Scrivener.HTML do
 
     if to do
       if active_page?(paginator, page_number) do
-        content_tag(:a, safe(text),
+        HTML.Tag.content_tag(:a, safe(text),
           class: link_classes_for_style(paginator, page_number, :semantic) |> Enum.join(" ")
         )
       else
-        link(safe(text),
+        HTML.Link.link(safe(text),
           to: to,
           rel: Scrivener.HTML.SEO.rel(paginator, page_number),
           class: li_classes_for_style(paginator, page_number, :semantic) |> Enum.join(" ")
         )
       end
     else
-      content_tag(:a, safe(text),
+      HTML.Tag.content_tag(:a, safe(text),
         class: li_classes_for_style(paginator, page_number, :semantic) |> Enum.join(" ")
       )
     end
@@ -360,16 +362,17 @@ defmodule Scrivener.HTML do
           false -> []
         end
 
-    content_tag :li, class: li_classes_for_style(paginator, page_number, style) |> Enum.join(" ") do
+    HTML.Tag.content_tag :li,
+      class: li_classes_for_style(paginator, page_number, style) |> Enum.join(" ") do
       to = apply(path, args ++ [params_with_page])
 
       if to do
         if active_page?(paginator, page_number) do
-          content_tag(:a, safe(text),
+          HTML.Tag.content_tag(:a, safe(text),
             class: link_classes_for_style(paginator, page_number, style) |> Enum.join(" ")
           )
         else
-          link(safe(text),
+          HTML.Link.link(safe(text),
             to: to,
             rel: Scrivener.HTML.SEO.rel(paginator, page_number),
             class: link_classes_for_style(paginator, page_number, style) |> Enum.join(" ")
@@ -378,7 +381,7 @@ defmodule Scrivener.HTML do
       else
         style
         |> blank_link_tag()
-        |> content_tag(safe(text),
+        |> HTML.Tag.content_tag(safe(text),
           class: link_classes_for_style(paginator, page_number, style) |> Enum.join(" ")
         )
       end
@@ -634,7 +637,7 @@ defmodule Scrivener.HTML do
   defp safe(string) do
     string
     |> to_string()
-    |> raw()
+    |> HTML.raw()
   end
 
   def defaults(), do: @defaults

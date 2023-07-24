@@ -14,10 +14,7 @@ defmodule ScrivenerHtml.Mixfile do
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: "HTML helpers for Scrivener",
-      docs: [
-        main: Scrivener.HTML,
-        readme: "README.md"
-      ],
+      docs: [main: Scrivener.HTML, readme: "README.md"],
       package: package(),
       deps: deps(),
       aliases: aliases()
@@ -29,7 +26,7 @@ defmodule ScrivenerHtml.Mixfile do
   # Type `mix help compile.app` for more information
   def application do
     [
-      applications: [:logger]
+      applications: [:logger, :scrivener, :phoenix, :phoenix_html]
     ]
   end
 
@@ -47,12 +44,12 @@ defmodule ScrivenerHtml.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      {:scrivener, "~> 1.2 or ~> 2.0"},
-      {:phoenix_html, "~> 2.2 or ~> 3.0"},
-      {:phoenix, "~> 1.0", optional: true},
-      {:plug, "~> 1.1"},
-      {:ex_doc, "~> 0.19", only: :dev},
-      {:earmark, "~> 1.1", only: :dev}
+      {:scrivener, "~> 2.0"},
+      {:phoenix_html, ">= 0.0.0"},
+      {:phoenix, ">= 0.0.0"},
+      {:plug, ">= 0.0.0"},
+      {:ex_doc, "~> 0.30", only: :dev},
+      {:earmark, "~> 1.4", only: :dev}
     ]
   end
 
