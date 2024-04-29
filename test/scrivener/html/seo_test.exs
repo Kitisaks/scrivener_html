@@ -1,7 +1,10 @@
 defmodule Scrivener.HTML.SEOTest do
   use ExUnit.Case
+
   import Scrivener.HTML.SEO
+
   alias Scrivener.Page
+
   doctest Scrivener.HTML.SEO
 
   describe "#rel" do

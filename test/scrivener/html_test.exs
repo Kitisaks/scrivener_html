@@ -1,10 +1,12 @@
 defmodule Scrivener.HTMLTest do
   use ExUnit.Case
-  alias Scrivener.HTML
-  doctest Scrivener.HTML
 
   import Scrivener.Support.HTML
+
+  alias Scrivener.HTML
   alias Scrivener.Page
+
+  doctest Scrivener.HTML
 
   setup do
     Application.put_env(:scrivener_html, :view_style, :bootstrap)
@@ -273,10 +275,9 @@ defmodule Scrivener.HTMLTest do
       html = HTML.pagination_links(%Page{total_pages: 2, page_number: 2}, previous: "«")
 
       assert Phoenix.HTML.safe_to_string(html) ==
-               """
+               String.trim_trailing("""
                <nav><ul class=\"pagination\"><li class=\"\"><a class=\"\" href=\"?\" rel=\"prev\">«</a></li><li class=\"\"><a class=\"\" href=\"?\" rel=\"prev\">1</a></li><li class=\"active\"><a class=\"\">2</a></li></ul></nav>
-               """
-               |> String.trim_trailing()
+               """)
     end
 
     test "allows using raw" do
@@ -286,10 +287,9 @@ defmodule Scrivener.HTMLTest do
         )
 
       assert Phoenix.HTML.safe_to_string(html) ==
-               """
+               String.trim_trailing("""
                <nav><ul class=\"pagination\"><li class=\"\"><a class=\"\" href=\"?\" rel=\"prev\">&leftarrow;</a></li><li class=\"\"><a class=\"\" href=\"?\" rel=\"prev\">1</a></li><li class=\"active\"><a class=\"\">2</a></li></ul></nav>
-               """
-               |> String.trim_trailing()
+               """)
     end
 
     test "accept nested keyword list for additionnal params" do
@@ -377,8 +377,8 @@ defmodule Scrivener.HTMLTest do
       Application.put_env(:scrivener_html, :view_style, :bootstrap)
       Application.put_env(:scrivener_html, :routes_helper, MyApp.Router.Helpers)
 
-      assert HTML.pagination_links(
-               build_conn(),
+      assert build_conn()
+             |> HTML.pagination_links(
                %Page{
                  entries: [%{__struct__: Post, some: :object}],
                  page_number: 1,

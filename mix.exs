@@ -45,11 +45,13 @@ defmodule ScrivenerHtml.Mixfile do
   defp deps do
     [
       {:scrivener, "~> 2.0"},
-      {:phoenix_html, ">= 0.0.0"},
       {:phoenix, ">= 0.0.0"},
+      {:phoenix_html, ">= 0.0.0"},
+      {:phoenix_html_helpers, ">= 0.0.0"},
       {:plug, ">= 0.0.0"},
       {:ex_doc, "~> 0.30", only: :dev},
-      {:earmark, "~> 1.4", only: :dev}
+      {:earmark, "~> 1.4", only: :dev},
+      {:styler, "~> 0.9", only: [:dev, :test], runtime: false}
     ]
   end
 

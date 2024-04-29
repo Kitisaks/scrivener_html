@@ -11,8 +11,10 @@ defmodule Scrivener.HTML.SEO do
   to go into the `<head>` section of your page. See [SEO Tags in Phoenix](http://blog.danielberkompas.com/2016/01/28/seo-tags-in-phoenix.html)
   for help with how to do that. The recommended option is to use `render_existing/2` in your layout file and add a separate view to render that.
   """
+
+  use PhoenixHTMLHelpers
+
   alias Scrivener.Page
-  use Phoenix.HTML
 
   @defaults Keyword.drop(Scrivener.HTML.defaults(), [:view_style])
 
@@ -26,11 +28,9 @@ defmodule Scrivener.HTML.SEO do
       iex> Scrivener.HTML.SEO.rel(%Scrivener.Page{page_number: 5}, 8)
       "canonical"
   """
-  def rel(%Page{page_number: current_page}, page_number) when current_page + 1 == page_number,
-    do: "next"
+  def rel(%Page{page_number: current_page}, page_number) when current_page + 1 == page_number, do: "next"
 
-  def rel(%Page{page_number: current_page}, page_number) when current_page - 1 == page_number,
-    do: "prev"
+  def rel(%Page{page_number: current_page}, page_number) when current_page - 1 == page_number, do: "prev"
 
   def rel(_paginator, _page_number), do: "canonical"
 
@@ -59,13 +59,11 @@ defmodule Scrivener.HTML.SEO do
 
   def header_links(%Scrivener.Page{} = paginator), do: header_links(nil, paginator, [], [])
 
-  def header_links(%Scrivener.Page{} = paginator, opts),
-    do: header_links(nil, paginator, [], opts)
+  def header_links(%Scrivener.Page{} = paginator, opts), do: header_links(nil, paginator, [], opts)
 
   def header_links(conn, %Scrivener.Page{} = paginator), do: header_links(conn, paginator, [], [])
 
-  def header_links(conn, paginator, [{_, _} | _] = opts),
-    do: header_links(conn, paginator, [], opts)
+  def header_links(conn, paginator, [{_, _} | _] = opts), do: header_links(conn, paginator, [], opts)
 
   def header_links(conn, paginator, [_ | _] = args), do: header_links(conn, paginator, args, [])
 
